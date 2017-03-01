@@ -1,15 +1,19 @@
 package com.patryk1007.zoomviewpager;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,19 +24,59 @@ import java.util.List;
 public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.OnPageChangeListener, ViewPager.OnAdapterChangeListener {
 
     private TextAttr textViewAttr;
-    private TextView[] textViews = new TextView[0];
+    private TabView[] textViews = new TabView[0];
     private int headerPerView = 3;
     private int headerWidth;
     private ViewPager viewPager;
 
+    private int[] mPosition = new int[2];
+
+    private OnClickListener mListener;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
+        int x = (int) ev.getX();
+        int y = (int) ev.getY();
+
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                clickTab(x,y);
                 return false;
             default:
+
                 return super.onTouchEvent(ev);
+        }
+    }
+
+    /**
+     * 点击tab
+     *
+     * @param x
+     * @param y
+     */
+    public void clickTab(int x, int y){
+        parsePosition(textViews[1],x);
+        parsePosition(textViews[2],x);
+        parsePosition(textViews[3],x);
+    }
+
+    /**
+     * 解析点击事件
+     *
+     * @param view
+     * @param x
+     */
+    public void parsePosition(View view, int x){
+
+        view.getLocationOnScreen(mPosition);
+        int startX = mPosition[0];
+        int endX = mPosition[0] +  view.getWidth();
+
+        if (x >= startX && x <= endX) {
+            if (mListener != null){
+                mListener.onClick(view);
+            }
         }
     }
 
@@ -91,7 +135,7 @@ public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.O
     }
 
     private void createHeader(List<String> headers) {
-        textViews = new TextView[headers.size()];
+        textViews = new TabView[headers.size()];
         headerWidth = getContext().getResources().getDisplayMetrics().widthPixels;
 
         this.removeAllViews();
@@ -106,12 +150,25 @@ public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.O
         LinearLayout container = new LinearLayout(getContext());
         container.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         container.setOrientation(LinearLayout.HORIZONTAL);
+        container.setBackgroundColor(Color.WHITE);
+
         return container;
     }
 
     private TextView createHeaderItem(int position, String headerText) {
 
-        TextView header = new TextView(getContext());
+        int padding = (int) textViewAttr.getHvPadding();
+
+        TabView header = new TabView(getContext());
+
+        if (position == 1){
+            header.setId(R.id.tab_setting);
+        }else if (position == 2){
+            header.setId(R.id.tab_hall);
+        }else if (position == 3){
+            header.setId(R.id.tab_private_letter);
+        }
+
         LayoutParams linearParams = new LayoutParams(headerWidth / headerPerView, LayoutParams.WRAP_CONTENT);
         header.setLayoutParams(linearParams);
 
@@ -119,20 +176,28 @@ public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.O
         header.setScaleY(textViewAttr.getHvMinScale());
         header.setAlpha(textViewAttr.getHvTextAlpha());
         header.setTextColor(textViewAttr.getHvTextColor());
-        header.setPadding(0, (int) textViewAttr.getHvPadding(), 0, (int) textViewAttr.getHvPadding());
+        header.setPadding(0, padding, 0,padding);
+        Paint paint = header.getPaint();
+        paint.setFakeBoldText(true);
 
         header.setMaxLines(1);
-        header.setGravity(Gravity.CENTER);
         header.setEllipsize(TextUtils.TruncateAt.END);
         header.setText(headerText);
         header.setTextSize(TypedValue.COMPLEX_UNIT_PX, textViewAttr.getHvTextSize());
+
+        header.setGravity(Gravity.CENTER);
 
         textViews[position] = header;
 
         return header;
     }
 
+    public void setTabOnClickListener(OnClickListener listener){
+        mListener = listener;
+    }
+
     public void setCurrentPosition(int viewPagerPosition, int offset, float scale) {
+        Log.i("jiao","viewPagerPosition "+viewPagerPosition+" offset "+offset+" scale "+scale);
         int currentPosition = viewPagerPosition + 1;
         updateScale(currentPosition, scale);
         scrollTo(viewPagerPosition * headerWidth / headerPerView + offset / headerPerView, 0);
@@ -142,6 +207,24 @@ public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.O
         current = Math.round(current + offset);
         float position = 1 - (offset > 0.5f ? 1 - offset : offset);
         if (textViews != null && textViews.length > current) {
+
+            Log.i("jiao"," current "+current);
+
+            if (current == 2){
+                textViews[2].setCureentGravity(2,true,Gravity.CENTER);
+                textViews[1].setCureentGravity(1,false,Gravity.LEFT);
+                textViews[3].setCureentGravity(3,false,Gravity.RIGHT);
+            }else if (current == 1){
+                textViews[2].setCureentGravity(2,false,Gravity.RIGHT);
+                textViews[1].setCureentGravity(1,true,Gravity.CENTER);
+                textViews[3].setCureentGravity(3,false,Gravity.CENTER);
+            }else if (current == 3){
+                textViews[2].setCureentGravity(2,false,Gravity.LEFT);
+                textViews[1].setCureentGravity(1,false,Gravity.CENTER);
+                textViews[3].setCureentGravity(3,true,Gravity.CENTER);
+            }
+
+
             updateTextView(textViews[current], getScale(position - 0.5f), getAlpha(position - 0.5f), textViewAttr.getHvTextColorActiveTab());
             updateNextAndPrev(current);
         }
@@ -158,6 +241,26 @@ public class ViewPagerHeader extends HorizontalScrollView implements ViewPager.O
     }
 
     private void updateNextAndPrev(int current) {
+
+        if (current == 1){
+//            textViews[current].setGravity(Gravity.CENTER);
+//            textViews[2].setGravity(Gravity.RIGHT);
+
+//            textViews[2].setPosition(current);
+        }else if (current == 2){
+//            textViews[2].setGravity(Gravity.CENTER);
+//            textViews[2].setPosition(current);
+
+//            textViews[1].setGravity(Gravity.LEFT);
+//            textViews[3].setGravity(Gravity.RIGHT);
+        }else if (current == 3){
+//            textViews[2].setGravity(Gravity.LEFT);
+//            textViews[2].setPosition(current);
+
+//            textViews[3].setGravity(Gravity.CENTER);
+        }
+
+
         float scale = textViewAttr.getHvMinScale();
         float alpha = textViewAttr.getHvTextAlpha();
         int color = textViewAttr.getHvTextColor();

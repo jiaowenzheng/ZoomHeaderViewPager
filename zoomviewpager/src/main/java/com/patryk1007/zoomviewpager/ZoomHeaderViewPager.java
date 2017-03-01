@@ -13,6 +13,8 @@ public class ZoomHeaderViewPager extends LinearLayout {
     private ViewPager viewPager;
     private TextAttr textAttr;
 
+    private OnClickListener mListener;
+
 
     public ZoomHeaderViewPager(Context context) {
         super(context);
@@ -63,8 +65,13 @@ public class ZoomHeaderViewPager extends LinearLayout {
             ViewPagerHeader header = new ViewPagerHeader(getContext(), textAttr);
             header.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
             header.setViewPager(viewPager);
+            header.setTabOnClickListener(mListener);
             this.addView(header, 0);
         }
+    }
+
+    public void setTabOnClickListener(OnClickListener listener){
+        mListener = listener;
     }
 
 }

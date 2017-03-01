@@ -6,9 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.patryk1007.zoomviewpager.ZoomHeaderViewPager;
 
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private ZoomHeaderViewPager mZoomHeaderViewPager;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +24,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
-        if (pager != null) {
-            pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
+        mZoomHeaderViewPager = (ZoomHeaderViewPager) findViewById(R.id.zoom_header_view_pager);
+        mZoomHeaderViewPager.setTabOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.tab_hall:
+                mViewPager.setCurrentItem(1);
+                break;
+            case R.id.tab_private_letter:
+                mViewPager.setCurrentItem(2);
+                break;
+            case R.id.tab_setting:
+                mViewPager.setCurrentItem(0);
+                break;
         }
     }
 
@@ -37,17 +59,17 @@ public class MainActivity extends AppCompatActivity {
             switch (pos) {
 
                 case 0:
-                    return PageFragment.newInstance("Frag1", "#00ff00");
+                    return PageFragment.newInstance("Fragment1", "#FFFFFF");
                 case 1:
-                    return PageFragment.newInstance("Frag2", "#ff5050");
+                    return PageFragment.newInstance("Fragment2", "#FFFFFF");
                 case 2:
-                    return PageFragment.newInstance("Frag3", "#ff9900");
+                    return PageFragment.newInstance("Fragment3", "#FFFFFF");
                 case 3:
-                    return PageFragment.newInstance("Frag4", "#0066ff");
+                    return PageFragment.newInstance("Frag4", "#FFFFFF");
                 case 4:
-                    return PageFragment.newInstance("Frag5", "#cc33ff");
+                    return PageFragment.newInstance("Frag5", "#FFFFFF");
                 default:
-                    return PageFragment.newInstance("Frag6", "#ffff66");
+                    return PageFragment.newInstance("Frag6", "#FFFFFF");
             }
         }
 
@@ -55,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Title1";
+                    return "设置";
                 case 1:
-                    return "Title2";
+                    return "聊天室";
                 case 2:
-                    return "Title3";
+                    return "私信";
                 default:
                     return "Title default";
 
@@ -68,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 5;
+            return 3;
         }
 
     }

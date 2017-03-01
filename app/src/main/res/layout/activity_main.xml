@@ -5,16 +5,17 @@
     android:layout_height="match_parent">
 
     <com.patryk1007.zoomviewpager.ZoomHeaderViewPager
+        android:id="@+id/zoom_header_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:hvPadding="15dp"
         app:hvTextAlpha="0.5"
         app:hvTextAlphaActiveTab="0.9"
-        app:hvTextColor="@android:color/holo_green_dark"
-        app:hvTextColorActiveTab="@android:color/holo_red_dark"
-        app:hvTextScale="0.6"
+        app:hvTextColor="#999999"
+        app:hvTextColorActiveTab="#555555"
+        app:hvTextScale="0.8"
         app:hvTextScaleActiveTab="1.0"
-        app:hvTextSize="20sp">
+        app:hvTextSize="18sp">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
