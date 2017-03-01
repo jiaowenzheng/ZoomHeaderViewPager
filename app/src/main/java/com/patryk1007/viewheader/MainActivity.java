@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (pos) {
 
                 case 0:
-                    return PageFragment.newInstance("Fragment1", "#FFFFFF");
+                    return PageFragment.newInstance("Fragment1", "#FF0000");
                 case 1:
-                    return PageFragment.newInstance("Fragment2", "#FFFFFF");
+                    return PageFragment.newInstance("Fragment2", "#00FF00");
                 case 2:
-                    return PageFragment.newInstance("Fragment3", "#FFFFFF");
+                    return PageFragment.newInstance("Fragment3", "#0000FF");
                 case 3:
                     return PageFragment.newInstance("Frag4", "#FFFFFF");
                 case 4:
