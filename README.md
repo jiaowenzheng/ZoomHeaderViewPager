@@ -1,7 +1,7 @@
 # ZoomHeaderViewPager
 
 ![ZoomHeaderViewPager Demo][demo_gif]
-<img src="https://github.com/jiaowenzheng/ZoomHeaderViewPager/raw/master/screen/demo2.png" width="300" height="300"/>
+<img src="https://github.com/jiaowenzheng/ZoomHeaderViewPager/raw/master/screen/demo2.png" width="200" height="500"/>
 
 # Usage
 
