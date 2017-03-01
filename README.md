@@ -1,6 +1,7 @@
 # ZoomHeaderViewPager
 
 ![ZoomHeaderViewPager Demo][demo_gif]
+![ZoomHeaderViewPager Demo][demo_png]
 
 # Usage
 
@@ -91,3 +92,4 @@ limitations under the License.
 ```
 
 [demo_gif]: https://bytebucket.org/moodup/headerviewpager/raw/731ab624167cf459dc8634719de728e0396bcf14/screen/demo1.gif?token=ad81426659b7884ea43e60a7f5d3db0eab359346
+[demo_png]: https://bytebucket.org/moodup/headerviewpager/raw/731ab624167cf459dc8634719de728e0396bcf14/screen/demo2.png?token=ad81426659b7884ea43e60a7f5d3db0eab359346
